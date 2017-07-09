@@ -2,6 +2,10 @@ class Board
 
 	DEFAULT_SIZE = 8
 
+	@@h_edge = '='
+	@@v_edge = '|'
+	@@blank = '-'
+
 	attr_accessor :queens
 
   def initialize(options={})
@@ -35,10 +39,10 @@ class Board
 
   def place_queen(column=0, row=0)
     queen = Queen.new
-    @queens = queen
+    @queens << queen
     queen.column = column
     queen.row = row
-    queen
+    return queen
   end
 
   def remove_queen(column,row)
@@ -50,9 +54,27 @@ class Board
   	end
   end
 
+  def display
+  	puts
+  	puts @@h_edge * (columns + 2)
+  	rows.times do |row|
+  		print @@v_edge
+  		columns.times do |column|
+  			print contents_at(column,row)
+  		end
+  		puts @@v_edge
+  	end
+  	puts @@h_edge * (columns + 2)
+  	puts
+  end
+
   private
 
     def find_queen(column,row)
   	  @queens.detect {|q| q.location?(column,row)}
+    end
+
+    def contents_at(column,row)
+    	find_queen(column,row) || @@blank
     end
 end
